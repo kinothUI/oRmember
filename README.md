@@ -36,10 +36,9 @@ $ git clone https://github.com/kinothUI/ormember.git ormember
 ### Install dependencies
 
 ```bash
-# install back-end dependencies and create /uploads folder
+# install back-end dependencies
 $ cd oRmember
 $ npm install
-$ mkdir uploads
 
 # install front-end dependencies
 $ cd client
