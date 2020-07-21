@@ -1,7 +1,7 @@
 const mysql = require("mysql");
-const database = require("./config");
+const { settings } = require("./config");
 
-const connection = mysql.createPool(database.settings);
+const connection = mysql.createPool(settings);
 
 const mysqlConnector = (sql, callback) => {
   return new Promise((resolve, reject) => {
@@ -16,5 +16,5 @@ const mysqlConnector = (sql, callback) => {
 };
 
 module.exports = {
-  query: mysqlConnector
+  query: mysqlConnector,
 };
