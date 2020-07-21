@@ -6,11 +6,11 @@ const path = require("path");
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads");
+    cb(null, "./public/images");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
-  }
+  },
 });
 
 const upload = multer({ storage });
@@ -19,11 +19,7 @@ const upload = multer({ storage });
 const logoController = require("../../controllers/logoController");
 
 router.get("/logos", logoController.getAllLogos);
-router.post(
-  "/logo/upload/",
-  upload.single("file", "uuid"),
-  logoController.uploadLogo
-);
+router.post("/logo/upload/", upload.single("file", "uuid"), logoController.uploadLogo);
 router.get("/logos/delete/:filename", logoController.deleteLogo);
 
 module.exports = router;
