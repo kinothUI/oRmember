@@ -4,16 +4,12 @@
   "description": "Order/Setup Tool for Traders",
   "main": "app.js",
   "scripts": {
-    "install": "mkdir uploads",
-    "start": "node app.js",
     "dev": "nodemon app.js",
-    "client": "npm start --prefix client",
-    "react": "concurrently \"nodemon app.js\" \"npm run client\""
+    "prod": "node app.js"
   },
   "author": "kinoth",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^4.1.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
