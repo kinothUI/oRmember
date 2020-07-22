@@ -7,7 +7,7 @@ const getAllOrders = async (req, res) => {
 
     res.json({ data });
   } catch (error) {
-    res.send(error);
+    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 
@@ -20,7 +20,7 @@ const addOrder = async (req, res) => {
 
     res.sendStatus(204);
   } catch (error) {
-    res.send(error);
+    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 
@@ -33,7 +33,7 @@ const fillOrder = async (req, res) => {
 
     res.sendStatus(204);
   } catch (error) {
-    res.send(error);
+    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 
@@ -46,7 +46,7 @@ const deleteOrder = async (req, res) => {
 
     res.sendStatus(204);
   } catch (error) {
-    res.send(error);
+    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 

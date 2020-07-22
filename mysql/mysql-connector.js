@@ -7,7 +7,7 @@ const mysqlConnector = (sql, callback) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, (err, results) => {
       if (err) {
-        return reject();
+        return reject(err);
       } else {
         return resolve({ data: results });
       }

@@ -13,42 +13,44 @@ export class AddOrder extends Component {
       volume: "",
       date: "",
       comment: "",
-      disabled: false
+      disabled: false,
     };
   }
 
-  onSubmit = e => {
+  onSubmit = (e) => {
     const { xchange, ticker, type, lmt, volume, comment } = this.state;
+
     e.preventDefault();
-    let date = Date.now();
+    const date = Date.now();
     this.props.rememberOrder(xchange, ticker, type, lmt, volume, comment, date);
-    this.setState({
-      xchange: "",
-      ticker: "",
-      type: "",
-      lmt: "",
-      volume: "",
-      comment: ""
-    });
+    this.setState(this.resetState());
     e.target.reset();
   };
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
+  resetState = () => ({
+    xchange: "",
+    ticker: "",
+    type: "",
+    lmt: "",
+    volume: "",
+    comment: "",
+  });
 
   render() {
+    const error = !!this.props.error.code;
+
     return (
       <>
-        <Form
-          onSubmit={this.onSubmit}
-          style={{ display: "flex" }}
-          autoComplete='off'
-        >
+        <Form onSubmit={this.onSubmit} style={{ display: "flex" }} autoComplete='off'>
           <Input
             type='text'
             name='xchange'
             onChange={this.onChange}
             placeholder='Add Exchange...'
             required
+            disabled={error}
           />
           <Input
             type='text'
@@ -56,6 +58,7 @@ export class AddOrder extends Component {
             onChange={this.onChange}
             placeholder='Add Ticker...'
             required
+            disabled={error}
           />
           <ul className='buy'>
             <li>
@@ -67,6 +70,7 @@ export class AddOrder extends Component {
                 id='buy'
                 value='buy'
                 required
+                disabled={error}
               />
               <label htmlFor='buy'>Buy</label>
             </li>
@@ -81,6 +85,7 @@ export class AddOrder extends Component {
                 id='sell'
                 value='sell'
                 required
+                disabled={error}
               />
               <label htmlFor='sell'>Sell</label>
             </li>
@@ -91,6 +96,7 @@ export class AddOrder extends Component {
             onChange={this.onChange}
             placeholder='your Limit...'
             required
+            disabled={error}
           />
           <Input
             type='text'
@@ -98,18 +104,20 @@ export class AddOrder extends Component {
             onChange={this.onChange}
             placeholder='Volume...'
             required
+            disabled={error}
           />
           <Input
             type='text'
             name='comment'
             onChange={this.onChange}
             placeholder='Comment...'
+            disabled={error}
           />
           <Button
             type='submit'
             name='Submit'
             variant='outline-dark'
-            disabled={this.state.disabled}
+            disabled={this.state.disabled || error}
           >
             Add Order
           </Button>

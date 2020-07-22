@@ -5,7 +5,7 @@ import AddOrder from "./components/AddOrder";
 import Header from "./components/layout/Header";
 import request from "superagent";
 
-import { Divider } from "semantic-ui-react";
+import { Divider, Message } from "semantic-ui-react";
 
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -13,6 +13,7 @@ import "./App.css";
 class App extends Component {
   state = {
     orders: [],
+    error: { code: 0, msg: "" },
   };
 
   componentDidMount() {
@@ -22,8 +23,19 @@ class App extends Component {
   getOrders = () => {
     fetch("/api/orderData/orders")
       .then((response) => response.json())
-      .then((data) => this.getLogos(data.data))
-      .catch((error) => console.error(error));
+      .then((data) => {
+        if (data.code) return this.setState({ error: { code: data.code, msg: data.msg } });
+
+        this.getLogos(data.data);
+      })
+      .catch(() => {
+        this.setState({
+          error: {
+            code: 502,
+            msg: "API not available! Please check your connection to the API!",
+          },
+        });
+      });
   };
 
   getLogos = (orders) => {
@@ -151,11 +163,8 @@ class App extends Component {
         .field("file", logo)
         .field("uuid", uuid);
       upload.end((err, response) => {
-        if (err) {
-          console.error(err);
-        } else {
-          this.handleLogoUploadResponse(response);
-        }
+        if (err) console.error(err);
+        else this.handleLogoUploadResponse(response);
       });
       return logo;
     });
@@ -203,27 +212,38 @@ class App extends Component {
             <div className={"col-lg-12"}>
               <Divider />
 
-              <AddOrder rememberOrder={this.rememberOrder} />
+              <AddOrder rememberOrder={this.rememberOrder} error={this.state.error} />
 
-              <Divider />
+              <Divider section />
             </div>
           </div>
           <div className={"row"}>
-            <div className={"col-lg-12"}>
-              <TableItem
-                orders={this.state.orders}
-                toggleFilled={this.toggleFilled}
-                deleteOrder={this.deleteOrder}
-                uploadLogo={this.uploadLogo}
-                deleteLogo={this.deleteLogo}
-                logo={this.state.logo}
-              />
-            </div>
+            <div className={"col-lg-12"}>{this.renderItemsTable()}</div>
           </div>
         </div>
       </div>
     );
   }
+
+  renderItemsTable = () => {
+    const { error } = this.state;
+
+    return error.code === 0 ? (
+      <TableItem
+        orders={this.state.orders}
+        toggleFilled={this.toggleFilled}
+        deleteOrder={this.deleteOrder}
+        uploadLogo={this.uploadLogo}
+        deleteLogo={this.deleteLogo}
+        logo={this.state.logo}
+      />
+    ) : (
+      <React.Fragment>
+        <Message negative header={`Error ${error.code}`} content={error.msg} />
+        <Divider section />
+      </React.Fragment>
+    );
+  };
 }
 
 export default App;
