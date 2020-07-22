@@ -18,8 +18,9 @@ const uploadLogo = async (req, res) => {
     const uuid = req.body.uuid;
     const filename = req.file.filename;
     const INSERT_LOGO_QUERY = `INSERT INTO logo (uuid, src, thumbnail, thumbnailWidth, thumbnailHeight) VALUES('${uuid}','${filename}', '${filename}', '150', '85');`;
-    await mysql.query(INSERT_LOGO_QUERY);
-    res.status(200).send({ uuid, filename });
+    const response = await mysql.query(INSERT_LOGO_QUERY);
+
+    res.status(200).send({ uuid, filename, id: response.data.insertId });
   } catch (error) {
     res.send(error);
   }
@@ -27,13 +28,13 @@ const uploadLogo = async (req, res) => {
 
 const deleteLogo = async (req, res) => {
   try {
-    const { filename } = req.params;
-    const DELETE_LOGO_QUERY = `DELETE FROM logo WHERE src='${filename}';`;
+    const { id, filename } = req.params;
+
+    const DELETE_LOGO_QUERY = `DELETE FROM logo WHERE id='${id}';`;
     let response = await mysql.query(DELETE_LOGO_QUERY);
-    res.json({
-      data: response.data,
-    });
-    fs.unlink(`./uploads/${filename}`, (err) => {
+
+    res.json({ data: response.data });
+    fs.unlink(`./public/images/${filename}`, (err) => {
       err ? console.error(err) : null;
     });
   } catch (error) {

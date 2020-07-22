@@ -1,18 +1,7 @@
 # oRmember
 
-The idea was to create a handy Application running on Local Area Network to securly access your trading info's from everywhere.
-The inspiration came from the infamous ToDo's App. In fact, this is my very first Javascript / React / NodeJS project, so don't knock me too hard for the code.
-
 ![ormember-img1](https://i.ibb.co/W0JNM1m/Screen-Shot-2019-08-18-at-5-03-05-PM.png)
 ![ormember-img2](https://i.ibb.co/vcr7Dhp/Screen-Shot-2019-08-18-at-4-15-25-PM.png)
-
-## Features
-
-- Track down your Orders/Setups with ease
-- Attach Charts on your Orders
-- Mark Order as filled (yay)
-- Delete Orders
-- Delete Logos
 
 ## Packages
 
@@ -68,11 +57,14 @@ $ CREATE TABLE `ormember`.`orders` (
   `filled` TINYINT NULL);
 
 $ CREATE TABLE `ormember`.`logo` (
+  `id` NOT NULL AUTO_INCREMENT,
   `uuid` VARCHAR(65) NULL,
   `src` VARCHAR(45) NULL,
   `thumbnail` VARCHAR(45) NULL,
   `thumbnailHeight` INT NULL,
-  `thumbnailWidth` INT NULL);
+  `thumbnailWidth` INT NULL,
+  PRIMARY KEY (id)
+  );
 ```
 
 ### Configure MySQL connection
@@ -84,7 +76,7 @@ const settings = {
   host: "your_database_host",
   user: "your_database_user",
   password: "users_password",
-  database: "ormember"
+  database: "ormember",
 };
 ```
 

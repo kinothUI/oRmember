@@ -20,6 +20,6 @@ const logoController = require("../../controllers/logoController");
 
 router.get("/logos", logoController.getAllLogos);
 router.post("/logo/upload/", upload.single("file", "uuid"), logoController.uploadLogo);
-router.get("/logos/delete/:filename", logoController.deleteLogo);
+router.get("/logos/delete/:id/:filename", logoController.deleteLogo);
 
 module.exports = router;

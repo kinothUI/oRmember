@@ -10,7 +10,7 @@ class ImageGallery extends Component {
 
     this.state = {
       images: this.props.images,
-      currentImage: 0
+      currentImage: 0,
     };
 
     this.onCurrentImageChange = this.onCurrentImageChange.bind(this);
@@ -21,9 +21,12 @@ class ImageGallery extends Component {
 
   deleteImage = () => {
     const { images, currentImage } = this.state;
-    const { deleteLogo } = this.props;
 
-    deleteLogo(images[currentImage].src, images[currentImage].uuid);
+    const curImageId = images[currentImage].id;
+    const curImageUuid = images[currentImage].uuid;
+    const curImagesrc = images[currentImage].src.replace("/public/images/", "");
+
+    this.props.deleteLogo(curImageId, curImageUuid, curImagesrc);
 
     if (currentImage > 1 && currentImage === 1) {
       this.setState({ currentImage: currentImage - 1 });
@@ -32,12 +35,13 @@ class ImageGallery extends Component {
     }
   };
 
-  onCurrentImageChange = index => {
+  onCurrentImageChange = (index) => {
     this.setState({ currentImage: index });
   };
 
   render() {
     const { images } = this.props;
+
     return (
       <div>
         <Gallery
@@ -52,7 +56,8 @@ class ImageGallery extends Component {
               color='red'
               onClick={this.deleteImage}
               size='big'
-            />
+              className='cursor'
+            />,
           ]}
         />
       </div>

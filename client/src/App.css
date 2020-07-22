@@ -100,8 +100,8 @@ a {
   background: rgba(40, 167, 69);
   font-weight: 700;
   color: #ffffff;
-  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease,
-    box-shadow 0.2s ease, background 0.2s ease;
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .sell {
@@ -155,11 +155,15 @@ a {
   background: rgb(220, 53, 69);
   font-weight: 700;
   color: #ffffff;
-  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease,
-    box-shadow 0.2s ease, background 0.2s ease;
+  transition: opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .expandRowTable {
   width: 100%;
   border: none;
+}
+
+.red.trash.alternate.big.icon.cursor {
+  cursor: pointer;
 }

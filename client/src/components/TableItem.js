@@ -20,10 +20,19 @@ class TableItem extends Component {
     return hours + ":" + minutes + " " + day + "." + month + "." + year;
   };
 
+  /**
+   *
+   * @param {string} uuid the uuid of corresponding row
+   * @param {*} logo
+   */
   onImageDrop = (uuid, logo) => {
     this.props.uploadLogo(uuid, logo);
   };
 
+  /**
+   *
+   * @param {string} uuid the uuid of corresponding row
+   */
   deleteOrder = (uuid) => {
     this.props.deleteOrder(uuid);
   };
@@ -94,6 +103,10 @@ class TableItem extends Component {
     return orders.map((orders) => (orders.filled && orders.uuid) || false);
   }
 
+  /**
+   *
+   * @param {boolean} selected
+   */
   selectRowProps = (selected) => ({
     mode: "checkbox",
     clickToSelect: false,

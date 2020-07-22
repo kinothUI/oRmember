@@ -117,14 +117,15 @@ class App extends Component {
     });
   };
 
-  deleteLogo = (filename, uuid) => {
+  deleteLogo = (id, uuid, filename) => {
     if (uuid) {
       const { orders } = this.state;
+
       this.setState({
         orders: orders.map((order) => {
           if (order.uuid === uuid) {
             let logoArr = [...order.logo];
-            logoArr.filter((logo) => logo.src !== filename);
+            logoArr.filter((logo) => logo.id !== id);
             order.logo = logoArr;
           }
           return order;
@@ -132,14 +133,14 @@ class App extends Component {
       });
       orders.map((order) => {
         if (order.uuid === uuid) {
-          let newLogo = order.logo.filter((logo) => logo.src !== filename);
+          let newLogo = order.logo.filter((logo) => logo.id !== id);
           order.logo = newLogo;
         }
         return order;
       });
-      fetch("/api/logoData/logos/delete/" + filename).catch((err) => console.error(err));
+      fetch(`/api/logoData/logos/delete/${id}/${filename}`).catch((err) => console.error(err));
     } else {
-      fetch("/api/logoData/logos/delete/" + filename).catch((err) => console.error(err));
+      fetch(`/api/logoData/logos/delete/${id}/${filename}`).catch((err) => console.error(err));
     }
   };
 
@@ -153,19 +154,22 @@ class App extends Component {
         if (err) {
           console.error(err);
         } else {
-          this.handleLogoUploadResponse(response.body.uuid, response.body.filename);
+          this.handleLogoUploadResponse(response);
         }
       });
       return logo;
     });
   };
 
-  handleLogoUploadResponse = (uuid, filename) => {
+  handleLogoUploadResponse = (response) => {
     const { orders } = this.state;
+    const { id, uuid, filename } = response.body;
+
     let logo = {
+      id,
       uuid,
-      src: `${filename}`,
-      thumbnail: `${filename}`,
+      src: `/public/images/${filename}`,
+      thumbnail: `/public/images/${filename}`,
       thumbnailWidth: 150,
       thumbnailHeight: 85,
     };
