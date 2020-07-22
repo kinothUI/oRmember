@@ -12,7 +12,7 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    orders: []
+    orders: [],
   };
 
   componentDidMount() {
@@ -21,23 +21,30 @@ class App extends Component {
 
   getOrders = () => {
     fetch("/api/orderData/orders")
-      .then(response => response.json())
-      .then(data => this.getLogos(data.data))
-      .catch(error => console.error(error));
+      .then((response) => response.json())
+      .then((data) => this.getLogos(data.data))
+      .catch((error) => console.error(error));
   };
 
-  getLogos = orders => {
+  getLogos = (orders) => {
     fetch("/api/logoData/logos")
-      .then(response => response.json())
-      .then(data => this.handleInitialData(orders, data.data))
-      .catch(error => console.error(error));
+      .then((response) => response.json())
+      .then((data) => {
+        const logos = data.data.map((logo) => ({
+          ...logo,
+          src: `/public/images/${logo.src}`,
+          thumbnail: `/public/images/${logo.thumbnail}`,
+        }));
+        this.handleInitialData(orders, logos);
+      })
+      .catch((error) => console.error(error));
   };
 
   handleInitialData = (order, logo) => {
     if (order) {
       this.setState({
-        orders: order.map(i => {
-          logo.map(j => {
+        orders: order.map((i) => {
+          logo.map((j) => {
             if (i.uuid === j.uuid) {
               if (i.logo) {
                 let arr = [...i.logo];
@@ -52,7 +59,7 @@ class App extends Component {
             return j;
           });
           return i;
-        })
+        }),
       });
     }
   };
@@ -68,43 +75,39 @@ class App extends Component {
       comment,
       date,
       filled: false,
-      logo: false
+      logo: false,
     };
     this.setState({ orders: [...this.state.orders, newOrder] });
     fetch(
-      `/api/orderData/orders/add?uuid=${
-        newOrder.uuid
-      }&xchange=${xchange}&ticker=${ticker}&type=${type}&lmt=${lmt}&volume=${volume}&comment=${comment}&date=${date}`
+      `/api/orderData/orders/add?uuid=${newOrder.uuid}&xchange=${xchange}&ticker=${ticker}&type=${type}&lmt=${lmt}&volume=${volume}&comment=${comment}&date=${date}`
     );
   };
 
-  toggleFilled = id => {
+  toggleFilled = (id) => {
     this.setState({
-      orders: this.state.orders.map(order => {
+      orders: this.state.orders.map((order) => {
         if (order.uuid === id) {
           order.filled = !order.filled;
-          fetch(
-            `/api/orderData/orders/filled?uuid=${id}&filled=${order.filled}`
-          ).catch(err => console.error(err));
+          fetch(`/api/orderData/orders/filled?uuid=${id}&filled=${order.filled}`).catch((err) =>
+            console.error(err)
+          );
         }
         return order;
-      })
+      }),
     });
   };
 
-  deleteOrder = uuid => {
+  deleteOrder = (uuid) => {
     const { orders } = this.state;
     this.setState({
-      orders: [...this.state.orders.filter(orders => orders.uuid !== uuid)]
+      orders: [...this.state.orders.filter((orders) => orders.uuid !== uuid)],
     });
-    fetch(`/api/orderData/orders/delete/${uuid}`).catch(response =>
-      console.error(response)
-    );
-    orders.map(order => {
+    fetch(`/api/orderData/orders/delete/${uuid}`).catch((response) => console.error(response));
+    orders.map((order) => {
       if (order.uuid === uuid) {
         let a = order.logo;
         if (a && a.length) {
-          a.map(logo => {
+          a.map((logo) => {
             this.deleteLogo(logo.src);
             return logo;
           });
@@ -118,34 +121,30 @@ class App extends Component {
     if (uuid) {
       const { orders } = this.state;
       this.setState({
-        orders: orders.map(order => {
+        orders: orders.map((order) => {
           if (order.uuid === uuid) {
             let logoArr = [...order.logo];
-            logoArr.filter(logo => logo.src !== filename);
+            logoArr.filter((logo) => logo.src !== filename);
             order.logo = logoArr;
           }
           return order;
-        })
+        }),
       });
-      orders.map(order => {
+      orders.map((order) => {
         if (order.uuid === uuid) {
-          let newLogo = order.logo.filter(logo => logo.src !== filename);
+          let newLogo = order.logo.filter((logo) => logo.src !== filename);
           order.logo = newLogo;
         }
         return order;
       });
-      fetch("/api/logoData/logos/delete/" + filename).catch(err =>
-        console.error(err)
-      );
+      fetch("/api/logoData/logos/delete/" + filename).catch((err) => console.error(err));
     } else {
-      fetch("/api/logoData/logos/delete/" + filename).catch(err =>
-        console.error(err)
-      );
+      fetch("/api/logoData/logos/delete/" + filename).catch((err) => console.error(err));
     }
   };
 
   uploadLogo = (uuid, logo) => {
-    logo.map(logo => {
+    logo.map((logo) => {
       let upload = request
         .post("/api/logoData/logo/upload")
         .field("file", logo)
@@ -154,10 +153,7 @@ class App extends Component {
         if (err) {
           console.error(err);
         } else {
-          this.handleLogoUploadResponse(
-            response.body.uuid,
-            response.body.filename
-          );
+          this.handleLogoUploadResponse(response.body.uuid, response.body.filename);
         }
       });
       return logo;
@@ -171,11 +167,11 @@ class App extends Component {
       src: `${filename}`,
       thumbnail: `${filename}`,
       thumbnailWidth: 150,
-      thumbnailHeight: 85
+      thumbnailHeight: 85,
     };
 
     this.setState({
-      orders: orders.map(order => {
+      orders: orders.map((order) => {
         if (order.uuid === uuid) {
           if (order.logo) {
             let arr = [...order.logo];
@@ -188,7 +184,7 @@ class App extends Component {
           }
         }
         return order;
-      })
+      }),
     });
   };
 
