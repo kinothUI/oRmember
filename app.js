@@ -1,15 +1,15 @@
+const bodyParser = require("body-parser");
 const express = require("express");
-const cors = require("cors");
-
 const app = express();
 
-app.use(cors(), express.static("public/images"));
+app.use(express.static("public/images"));
+app.use(bodyParser.json({ limit: "50mb" }));
 
-const orderData = require("./routes/api/order");
-const logoData = require("./routes/api/logo");
+const orderRoutes = require("./routes/api/order");
+const logoRoutes = require("./routes/api/logo");
 
-app.use("/api/orderData", orderData);
-app.use("/api/logoData", logoData);
+app.use("/api/order", orderRoutes);
+app.use("/api/logo", logoRoutes);
 app.use("/public/images", express.static(__dirname + "/public/images"));
 
 const PORT = process.env.PORT || 4200;
