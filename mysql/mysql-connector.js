@@ -6,11 +6,8 @@ const connection = mysql.createPool(settings);
 const mysqlConnector = (sql, callback) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, (err, results) => {
-      if (err) {
-        return reject(err);
-      } else {
-        return resolve({ data: results });
-      }
+      if (err) return reject(err);
+      else return resolve({ data: results });
     });
   });
 };

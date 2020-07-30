@@ -3,7 +3,7 @@ const settings = {
   host: "",
   user: "",
   password: "",
-  database: ""
+  database: "ormember",
 };
 
 module.exports = { settings };

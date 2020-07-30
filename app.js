@@ -10,7 +10,7 @@ const logoRoutes = require("./routes/api/logo");
 
 app.use("/api/order", orderRoutes);
 app.use("/api/logo", logoRoutes);
-app.use("/public/images", express.static(__dirname + "/public/images"));
+app.use("/public/images", express.static(`${__dirname}/public/images`));
 
 const PORT = process.env.PORT || 4200;
 
