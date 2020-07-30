@@ -1,15 +1,17 @@
 const express = require("express");
-const router = express.Router();
-
 const multer = require("multer");
 const path = require("path");
+
+const router = express.Router();
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./public/images");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    // path.extname() prepends file extension
+    const filename = `${req.params.orderUuid}-${Date.now()}` + path.extname(file.originalname);
+    cb(null, filename);
   },
 });
 
@@ -18,8 +20,12 @@ const upload = multer({ storage });
 //Load Logo Controllers
 const logoController = require("../../controllers/logoController");
 
-router.get("/logos", logoController.getAllLogos);
-router.post("/logo/upload/", upload.single("file", "uuid"), logoController.uploadLogo);
-router.get("/logos/delete/:id/:filename", logoController.deleteLogo);
+router.get("/", logoController.getAllLogos);
+router.post(
+  "/upload/orderId/:orderId/orderUuid/:orderUuid",
+  upload.array("files"),
+  logoController.uploadLogo
+);
+router.delete("/delete", logoController.deleteLogo);
 
 module.exports = router;

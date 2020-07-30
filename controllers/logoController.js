@@ -3,35 +3,47 @@ const fs = require("fs");
 
 const getAllLogos = async (req, res) => {
   try {
-    const SELECT_LOGOS_QUERY = `SELECT * FROM logo;`;
+    const SELECT_LOGOS_QUERY = `SELECT * FROM logos;`;
     const { data } = await mysql.query(SELECT_LOGOS_QUERY);
 
+    res.type("json");
     res.json({ data });
   } catch (error) {
-    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
+    res.setHeader("Content-Type", "application/problem+json");
+    return res.json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 
 const uploadLogo = async (req, res) => {
   try {
-    const uuid = req.body.uuid;
-    const filename = req.file.filename;
+    const { orderId, orderUuid } = req.params;
+    const { files } = req;
 
-    const INSERT_LOGO_QUERY = `INSERT INTO logo (uuid, src, thumbnail, thumbnailWidth, thumbnailHeight) VALUES('${uuid}','${filename}', '${filename}', '150', '85');`;
-    const { data } = await mysql.query(INSERT_LOGO_QUERY);
+    const insertString = files
+      .map(
+        (file) => `('${orderUuid}', '${file.filename}', '${file.filename}', 85, 175, ${orderId})`
+      )
+      .join(", ");
 
-    res.json({ uuid, filename, id: data.insertId });
+    const INSERT_LOGO_QUERY = `INSERT INTO logos (uuid, src, thumbnail, thumbnailHeight, thumbnailWidth, order_id) VALUE${insertString};`;
+    const SELECT_LOGO_BY_ORDER_ID_Q = `SELECT logo_id AS id, uuid, src, thumbnail, thumbnailHeight, thumbnailWidth FROM logos WHERE order_id=${orderId};`;
+    await mysql.query(INSERT_LOGO_QUERY);
+    const { data } = await mysql.query(SELECT_LOGO_BY_ORDER_ID_Q);
+
+    res.type("json");
+    res.json({ files: data });
   } catch (error) {
-    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
+    res.setHeader("Content-Type", "application/problem+json");
+    return res.json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 
 const deleteLogo = async (req, res) => {
   try {
-    const { id, filename } = req.params;
+    const { id, filename } = req.body;
 
-    const DELETE_LOGO_QUERY = `DELETE FROM logo WHERE id='${id}';`;
-    await mysql.query(DELETE_LOGO_QUERY);
+    const DELETE_LOGO_QUERY = `DELETE FROM logos WHERE logo_id='${id}';`;
+    const sqlRes = await mysql.query(DELETE_LOGO_QUERY);
 
     fs.unlink(`./public/images/${filename}`, (err) => {
       err ? console.error(err) : null;
@@ -39,7 +51,8 @@ const deleteLogo = async (req, res) => {
 
     res.sendStatus(204);
   } catch (error) {
-    return res.status(500).json({ code: error.errno, msg: error.sqlMessage });
+    res.setHeader("Content-Type", "application/problem+json");
+    return res.json({ code: error.errno, msg: error.sqlMessage });
   }
 };
 
