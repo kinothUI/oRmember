@@ -21,6 +21,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+/client/icon-arrow-1161319f.zip
+/client/arrow.svg
 
 npm-debug.log*
 yarn-debug.log*
