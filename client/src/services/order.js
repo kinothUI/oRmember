@@ -8,21 +8,6 @@ export const fetchAddOrder = (body) => callApi("/api/order/add", HttpMethod.POST
 export const fetchPatchOrder = (orderId, filled) =>
   callApi("/api/order/patch", HttpMethod.PATCH, { orderId, filled });
 
-export const togglleFilledOrder = (id) => {
-  const init = {
-    method: HttpMethod.PATCH,
-  };
-
-  return fetch(`/api/order/filled`, init).then((response) => {
-    if (response.ok) return response.json().then((json) => json);
-
-    return Promise.reject({ code: response.status, msg: response.statusText }).then(
-      (response) => ({ response }),
-      (error) => ({ error: { code: error.code, msg: error.msg } })
-    );
-  });
-};
-
 export const fetchDeleteOrder = (id, files) =>
   callApi("/api/order/delete/", HttpMethod.DELETE, { id, files });
 
