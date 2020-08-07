@@ -15,41 +15,24 @@ const App = () => {
     // dynamically import locales
     import(`moment/locale/${locale}`)
       .then(() => moment.locale(locale))
-      .catch((e) => moment.locale("en-EN"));
+      .catch(() => moment.locale("en-EN"));
   }, []);
 
   return (
     <div>
-      {/* <Header /> */}
       <DefaultNavbar />
-      {/* <div className='pre-main-min-height'>
-          <Container as='header'>
-            <Divider section />
-            <DefaultMain />
-          </Container>
-        </div> */}
 
       <div className='main-content'>
-        <Container as='section'>
-          {/* <Grid> */}
-          {/* <Grid.Row> */}
-          {/* <AddOrder addOrder={this.addOrder} error={this.state.error} /> */}
-          {/* </Grid.Row> */}
-          {/* <Grid.Row> */}
-          {/* <Grid.Column> */}
+        <Container as='main'>
           <Divider section />
-          {/* {this.renderItemsTable()} */}
           <DefaultMain />
 
           <Divider section />
-          {/* </Grid.Column> */}
-          {/* </Grid.Row> */}
-          {/* </Grid> */}
         </Container>
       </div>
-      <div style={{ position: "fixed", bottom: 0, width: "100%" }}>
+      <Container as='footer' fluid className='no-padding'>
         <DefaultFooter />
-      </div>
+      </Container>
     </div>
   );
 };
