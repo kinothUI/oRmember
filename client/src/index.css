@@ -14,19 +14,11 @@ code {
 .main-content {
   display: flex;
 
-  min-height: calc(30vh - 50px);
-  padding-top: 50px;
+  min-height: 100vh;
   padding-bottom: 191px;
 
   justify-content: center;
   align-items: center;
-}
-
-.pre-main-min-height {
-  display: flex;
-
-  min-height: calc(89.5vh - 100px);
-  padding-top: 100px;
 }
 
 @font-face {
@@ -87,4 +79,9 @@ code {
 /* custom icon override */
 [class*=" icon-arrow"] {
   margin: 0 0.55rem 0 0 !important;
+}
+
+/* footer override */
+.no-padding {
+  padding: 0 !important;
 }
