@@ -6,12 +6,12 @@
 ## Packages
 
 - React
-- NodeJS
-- MySQL
-- React-Bootstrap
+- Redux
+- Redux-Saga
 - React-Semantic-UI
 - React-Bootstrap-Table2
 - React-Grid-Gallery
+- NodeJS
 
 ## Installation
 
@@ -25,11 +25,11 @@ $ git clone https://github.com/kinothUI/ormember.git ormember
 ### Install dependencies
 
 ```bash
-# install back-end dependencies
+# install api dependencies
 $ cd oRmember
 $ npm install
 
-# install front-end dependencies
+# install frontend dependencies
 $ cd client
 $ npm install
 ```
@@ -37,34 +37,9 @@ $ npm install
 ### Install MySQL Server & create Database or use your existing MySQL Server
 
 ```bash
-# i.e. on Linux Systems
+# i.e. on Debian Systems
 $ sudo apt install mysql-server
-```
-
-```mysql
-# Create database 'ormember'
-$ CREATE SCHEMA `ormember` DEFAULT CHARACTER SET utf8;
-# Create two tables
-$ CREATE TABLE `ormember`.`orders` (
-  `uuid` VARCHAR(65) NULL,
-  `xchange` VARCHAR(255) NULL,
-  `ticker` VARCHAR(45) NULL,
-  `type` VARCHAR(45) NULL,
-  `lmt` VARCHAR(45) NULL,
-  `volume` VARCHAR(45) NULL,
-  `comment` TEXT(10000) NULL,
-  `date` VARCHAR(45) NULL,
-  `filled` TINYINT NULL);
-
-$ CREATE TABLE `ormember`.`logo` (
-  `id` NOT NULL AUTO_INCREMENT,
-  `uuid` VARCHAR(65) NULL,
-  `src` VARCHAR(45) NULL,
-  `thumbnail` VARCHAR(45) NULL,
-  `thumbnailHeight` INT NULL,
-  `thumbnailWidth` INT NULL,
-  PRIMARY KEY (id)
-  );
+$ mysql -u root -p < schema.sql
 ```
 
 ### Configure MySQL connection
@@ -82,8 +57,14 @@ const settings = {
 
 ### Basic usage
 
+#### start api & ui in development mode
+
 ```bash
-$ npm run react
+$ npm run server
+$ cd client
+$ npm run start
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000).
+
+custom font created with [fontello.com](http://fontello.com)
