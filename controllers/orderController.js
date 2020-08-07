@@ -27,8 +27,6 @@ const addOrder = async (req, res) => {
   try {
     const { broker, ticker, direction, price, volume, note, date } = req.body;
 
-    console.log("date in addOrder()", date);
-
     const uuid = UUID.v4();
 
     const INSERT_ORDERS_QUERY = `INSERT INTO orders (uuid, broker, ticker, direction, price, volume, note, date) VALUES('${uuid}','${broker}','${ticker}','${direction}','${price}','${volume}','${note}','${date}');`;
