@@ -17,6 +17,8 @@ import {
   ORDERS,
 } from "redux/actions/order";
 
+import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+
 const SetupTable = () => {
   const dispatch = useDispatch();
 

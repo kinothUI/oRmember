@@ -17,7 +17,6 @@ const ImageGallery = (props) => {
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
   const [logo, setLogo] = React.useState(InitialStateLogo);
 
-  // pendant to componentWillReceiveProps()
   React.useEffect(() => {
     setLogo(props.logo);
   }, [props.logo]);
@@ -32,9 +31,16 @@ const ImageGallery = (props) => {
     if (currentImageIndex + 1 === logo.length) setCurrentImageIndex(currentImageIndex - 1);
   };
 
+  const prefix = "/public/images/";
+  const logos = props.logo.map((logo) => ({
+    ...logo,
+    src: prefix + logo.src,
+    thumbnail: prefix + logo.thumbnail,
+  }));
+
   return (
     <Gallery
-      images={props.logo}
+      images={logos}
       rowHeight={95}
       backdropClosesModal
       currentImageWillChange={(index) => setCurrentImageIndex(index)}
