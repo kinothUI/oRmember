@@ -4,7 +4,7 @@
   "private": false,
   "dependencies": {
     "form-data": "^3.0.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment-timezone": "^0.5.31",
     "react": "^16.13.1",
     "react-bootstrap-table-next": "^3.3.5",
